@@ -25,5 +25,15 @@ namespace BookStore.Controllers
             return _libraryService.GetAllBooksByAuthor(request);
 
         }
+
+        [HttpPost("TestEndPoint")]
+        public string TestEndPoint([FromBody]
+
+            GetAllBooksByAuthorRequest request)
+        {
+            return "Ok";
+        }
     }
 }
+
+
