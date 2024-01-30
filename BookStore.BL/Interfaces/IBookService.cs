@@ -10,5 +10,6 @@ namespace BookStore.BL.Interfaces
     public interface IBookService
     {
         List<Book> GetAllBooksByAuthor(int authorId);
+
     }
 }

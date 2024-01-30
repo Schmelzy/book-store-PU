@@ -22,7 +22,7 @@ namespace BookStore.Controllers
 
             GetAllBooksByAuthor([FromBody] GetAllBooksByAuthorRequest request)
         {
-            return _libraryService.GetAllBooksByAuthor(request);
+            return _libraryService.GetAllBooksByAuthorAfterDate(request);
 
         }
 

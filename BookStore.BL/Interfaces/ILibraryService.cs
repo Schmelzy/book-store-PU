@@ -11,6 +11,8 @@ namespace BookStore.BL.Interfaces
     public interface ILibraryService
     {
         GetAllBooksByAuthorResponse?
-            GetAllBooksByAuthor(GetAllBooksByAuthorRequest request);
+            GetAllBooksByAuthorAfterDate(GetAllBooksByAuthorRequest request);
+
+        int GetAllBooksCount(int inputCount, int authorId);
     }
 }

@@ -1,12 +1,7 @@
 ﻿using BookStore.BL.Interfaces;
-using BookStore.Models.Models;
-using BookStore.Models.Responses;
 using BookStore.Models.Requests;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using BookStore.Models.Responses;
+
 
 namespace BookStore.BL.Services
 {
@@ -15,31 +10,45 @@ namespace BookStore.BL.Services
         private readonly IBookService _bookService;
         private readonly IAuthorService _authorService;
 
-        public LibraryService(IAuthorService authorService, 
-                                IBookService bookService)
+        public LibraryService(
+            IBookService bookService,
+            IAuthorService authorService)
         {
-            _authorService = authorService;
             _bookService = bookService;
+            _authorService = authorService;
         }
 
-        public Author? Author { get; private set; }
-        public List<Book>? Books { get; private set; }
-
-        public GetAllBooksByAuthorResponse? GetAllBooksByAuthor(GetAllBooksByAuthorRequest request)
+        public GetAllBooksByAuthorResponse?
+            GetAllBooksByAuthorAfterDate(
+                GetAllBooksByAuthorRequest request)
         {
-            throw new NotImplementedException();
-        }
+            var books = _bookService
+                .GetAllBooksByAuthor(request.AuthorId);
 
-        public GetAllBooksByAuthorResponse? GetAllBooksByAuthorAfterDate(GetAllBooksByAuthorRequest request)
-        {
-            var books = _bookService.GetAllBooksByAuthor(request.AuthorId);
-            var author = _authorService.GetById(request.AuthorId);
-            var result = new GetAllBooksByAuthorResponse();
+            var author = _authorService
+                .GetById(request.AuthorId);
 
-            Author = author;
-            Books = books.Where(b => b.ReleaseDate >= request.AfterDate).ToList();
+            if (author == null) return null;
+
+            var result = new GetAllBooksByAuthorResponse
+            {
+                Author = author, //Get author
+                Books = books
+                    .Where(b =>
+                        b.ReleaseDate >= request.AfterDate)
+                    .ToList()
+            };
 
             return result;
         }
+
+        public int GetAllBooksCount(int inputCount, int authorId)
+        {
+            if (inputCount <= 0) return 0;
+
+            var result = _bookService.GetAllBooksByAuthor(authorId);
+
+            return result.Count + inputCount;
         }
     }
+}
